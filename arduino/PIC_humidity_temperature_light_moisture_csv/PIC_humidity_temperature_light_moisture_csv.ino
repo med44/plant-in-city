@@ -1,10 +1,15 @@
-//Uses the Humirel HS1101 sensor connected to Pin 7
+//This code exports raw data (no calclutaions performed) via Serial.
+//We use this stream in Processing to provide real-time graphing of the data as part of a demo.
+
+//For the sensor circuits we used the MAKE Garduino tutorial by Luke Iseman: 
+//http://makeprojects.com/Project/Garduino-Geek-Gardening/62/1#.T9qApmhg9-c
+
 
 //Sensor pins
-int humidityPin = 7;  // 220 Ohm resistor connected to this pin
-int temperaturePin = 5;
-int lightPin = 1;
-int moisturePin = 3;
+int humidityPin = 7;  //  Humirel HS1101 sensor + 220 Ohm resistor
+int temperaturePin = 5; // LM35DZ Temperature sensor
+int lightPin = 1; // Photocell + 10k Ohm resistor
+int moisturePin = 3; //Two galvanized nails + 10k Ohm resistor
 int ledPin = 13;
 
 //Sensor variables
@@ -51,7 +56,7 @@ float readHumidity() {
   int humidity = (int) relativeHumidity;
   //Serial.print("Humidity: ");
   Serial.print(humidity);
-//  Serial.write(37);
+  //  Serial.write(37);
   Serial.print(",");
 
 }

@@ -9,8 +9,8 @@
 #include <SPI.h>
 #include <Ethernet.h>
 
-byte mac[] = {0x90, 0xA2, 0xDA, 0x00, 0x7C, 0xA2};
-byte ip[] = {192,168,1,120};
+byte mac[] = {0x90, 0xA2, 0xDA, 0x00, 0x7C, 0xA2}; // Replace with the number shown behind the Arduino Ethernet shield you're using
+byte ip[] = {192,168,1,120}; // Change this address to whatever setting works with your router
 //byte ip[] = {1};
 EthernetServer server(80);
 EthernetClient client;
@@ -80,7 +80,7 @@ void loop(){
           client.println("</HEAD>");
           client.println("<BODY>");
           client.println("<center>");
-          client.println("<H1>Water</H1>");
+          client.println("<H1>Button</H1>");
           
           client.println("<a href=\"/?on\" target=\"inlineframe\"><div id=\"button_arduino\">ON</div></a>"); 
           client.println("<a href=\"/?off\" target=\"inlineframe\"><div id=\"button_arduino\">OFF</div></a>"); 
