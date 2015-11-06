@@ -1,0 +1,186 @@
+<!DOCTYPE HTML>
+<head>
+<title>Yun Messages</title>
+<script type="text/javascript" src="zepto.min.js"></script>
+<script src="jquery-1.11.3.min.js"></script>	
+</head>
+
+<body onload="readSettings()">
+
+<H2> Plant-in City 2.0 </H2> <br>
+<form name="msgform" onSubmit="return sendMsg()">
+<!-- 
+<input type="time" name="msg">
+<input type="text" name="msg2">
+-->
+<hr>
+<H3> LIGHT </H3> <br>
+<span> Light every </span> 
+
+<select name="lightDay">
+	<option value="0">0</option>
+	<option value="1">1</option>
+	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	<option value="5">5</option>
+	<option value="6">6</option>
+	<option value="7">7</option>
+</select> days at
+
+<select name="lightHour">
+	<option value="00">00</option>
+	<option value="10">10</option>
+	<option value="11">11</option>
+	<option value="12">12</option>
+	<option value="13">13</option>
+	<option value="14">14</option>
+	<option value="15">15</option>
+	<option value="16">16</option>
+	<option value="17">17</option>
+	<option value="18">18</option>
+	<option value="19">19</option>
+	<option value="20">20</option>
+</select>
+:
+<select name="lightMinute">
+	<option value="00">00</option>
+	<option value="15">15</option>
+	<option value="30">30</option>
+	<option value="45">45</option>
+</select>
+for 
+<select name="lightDurHour">
+	<option value="00">00</option>
+	<option value="01">01</option>
+	<option value="02">02</option>
+	<option value="03">03</option>
+	<option value="04">04</option>
+	<option value="05">05</option>
+	<option value="06">06</option>
+	<option value="07">07</option>
+</select>
+:
+<select name="lightDurMinute">
+	<option value="00">00</option>
+	<option value="15">15</option>
+	<option value="30">30</option>
+	<option value="45">45</option>
+</select>
+:
+<select name="lightDurSecond">
+	<option value="00">00</option>
+	<option value="05">15</option>
+	<option value="10">30</option>
+	<option value="15">45</option>
+</select>
+
+<hr>
+<H3> WATER </H3> <br>
+<span> Water every </span> 
+
+<select name="waterDay">
+	<option value="0">0</option>
+	<option value="1">1</option>
+	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	<option value="5">5</option>
+	<option value="6">6</option>
+	<option value="7">7</option>
+</select> 
+days at
+<select name="waterHour">
+	<option value="00">00</option>
+	<option value="10">10</option>
+	<option value="11">11</option>
+	<option value="12">12</option>
+	<option value="13">13</option>
+	<option value="14">14</option>
+	<option value="15">15</option>
+	<option value="16">16</option>
+	<option value="17">17</option>
+	<option value="18">18</option>
+	<option value="19">19</option>
+	<option value="20">20</option>
+</select>
+:
+<select name="waterMinute">
+	<option value="00">00</option>
+	<option value="15">15</option>
+	<option value="30">30</option>
+	<option value="45">45</option>
+</select>
+for 
+<select name="waterDurHour">
+	<option value="00">00</option>
+	<option value="01">01</option>
+	<option value="02">02</option>
+	<option value="03">03</option>
+	<option value="04">04</option>
+	<option value="05">05</option>
+	<option value="06">06</option>
+	<option value="07">07</option>
+</select>
+:
+<select name="waterDurMinute">
+	<option value="00">00</option>
+	<option value="15">15</option>
+	<option value="30">30</option>
+	<option value="45">45</option>
+</select>
+:
+<select name="waterDurSecond">
+	<option value="00">00</option>
+	<option value="05">15</option>
+	<option value="10">30</option>
+	<option value="15">45</option>
+</select>
+
+<div>
+	<br>
+	<input type="submit" value="YUN IT!">
+</div>
+
+</form>
+<script type="text/javascript">	
+	
+function sendMsg() {
+// $ links to functions and classes in the library zepto.mim.js
+/* 192.168.0.10/arduino/ this is the 'input address' of the arduino. 
+	Can be put in browser and will work same as the $.get function bellow!
+	Anything after that is 'the message'	
+*/
+$.get('/arduino/' + 
+	document.msgform.lightDay.value + ',' + 
+	document.msgform.lightHour.value + ',' +
+	document.msgform.lightMinute.value + ',00,' +
+	document.msgform.lightDurHour.value + ',' + 	//for how long
+	document.msgform.lightDurMinute.value + ',' +
+	document.msgform.lightDurSecond.value + "," +
+	
+	document.msgform.waterDay.value + ',' + // how often	
+	document.msgform.waterHour.value + ',' + 	//at what time
+	document.msgform.waterMinute.value + ',00,' +	
+	document.msgform.waterDurHour.value + ',' + 	//for how long
+	document.msgform.waterDurMinute.value + ',' +
+	document.msgform.waterDurSecond.value
+	,
+	function(){
+		//alert("Success");
+	}
+);
+return false;
+}
+
+function readSettings() {
+	jQuery.post('settings.txt', function(data) { 
+		alert(data);
+		var item = data.split(",");
+		//alert(item[0]);
+	
+	});
+}
+
+</script>
+</body>
