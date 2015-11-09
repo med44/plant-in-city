@@ -5,10 +5,10 @@
 <script src="jquery-1.11.3.min.js"></script>	
 </head>
 
-<body onload="readSettings()">
+<body>
 
 <H2> Plant-in City 2.0 </H2> <br>
-<form name="msgform" onSubmit="return sendMsg()">
+<form name="msgform">
 <!-- 
 <input type="time" name="msg">
 <input type="text" name="msg2">
@@ -144,43 +144,22 @@ for
 
 </form>
 <script type="text/javascript">	
-	
-function sendMsg() {
-// $ links to functions and classes in the library zepto.mim.js
-/* 192.168.0.10/arduino/ this is the 'input address' of the arduino. 
-	Can be put in browser and will work same as the $.get function bellow!
-	Anything after that is 'the message'	
-*/
-$.get('/arduino/' + 
-	document.msgform.lightDay.value + ',' + 
-	document.msgform.lightHour.value + ',' +
-	document.msgform.lightMinute.value + ',00,' +
-	document.msgform.lightDurHour.value + ',' + 	//for how long
-	document.msgform.lightDurMinute.value + ',' +
-	document.msgform.lightDurSecond.value + "," +
-	
-	document.msgform.waterDay.value + ',' + // how often	
-	document.msgform.waterHour.value + ',' + 	//at what time
-	document.msgform.waterMinute.value + ',00,' +	
-	document.msgform.waterDurHour.value + ',' + 	//for how long
-	document.msgform.waterDurMinute.value + ',' +
-	document.msgform.waterDurSecond.value
-	,
-	function(){
-		//alert("Success");
-	}
-);
-return false;
-}
 
-function readSettings() {
-	jQuery.post('settings.txt', function(data) { 
-		alert(data);
-		var item = data.split(",");
-		//alert(item[0]);
+	var data_to_send={};
+	$('form select').each(function(index){
+		console.log(index)
+		data_to_send[$('form select')[index].name]=$('form select')[index].value;
+	})
 	
+	//PHP write 'data_to_send' to 'settings.json'
+
+	$.get('settings.json', function(body) { 
+        var data=JSON.parse(body)
+		for(var key in data){ 
+				document.msgform[key].value=data[key];
+		}
+
 	});
-}
 
 </script>
 </body>
