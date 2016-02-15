@@ -1,0 +1,97 @@
+.logo{
+	background-image: url('plantincity_logo.svg');
+	background-repeat: no-repeat;
+	display:block;
+	height: 100%;
+	width: 100%;
+	float: left;
+	clear: before;
+	clear: after;
+	}
+
+.topBar{
+	height:5em;
+	margin-top:20px;
+	display:block;
+	border-bottom-width: 1px;
+	border-bottom-style: inset;
+	margin-bottom: 40px;
+}
+
+body{
+	background-color:#FFF;
+	width: 100%;
+	font-family: Helvetica,Arial,Sans-serif;
+	font-size: 1.2em;
+	color: #333;
+}
+
+svg {
+	width: 540px;
+	height: 20px;
+	margin: 20px 20px;				
+}
+
+.scale {
+	border-style:solid;
+	border-color:#000;
+	border-width:1px;				
+}
+
+rect {
+	fill: #000;
+}
+
+.container {
+/*	background-color:#999;
+*/	width: 500px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: left;
+}
+
+.pin {
+	float: left;
+	display: block;
+	color: #AAA;
+}
+
+.pin .label {
+	margin-bottom: -10px;
+	color:#000;
+	font-size: 1.2em;
+	font-weight: 100;
+}
+
+.pin .val {
+	margin-top: -10px;
+	margin-left:20px;
+}
+
+.pins {
+	width: 640px;
+	margin: 0 auto;
+}
+
+.graph{
+	margin-top:20px;
+	height:240px;
+}
+
+.nav{
+	clear:before;
+	display:inline-block;
+	float: right;
+}
+
+.btn{
+	float:right;
+	width:100%;
+}
+
+.textLogo{
+	font-size:2.5em;
+	font-weight:100;
+}
+
+#myButton{}

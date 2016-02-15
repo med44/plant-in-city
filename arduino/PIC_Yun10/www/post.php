@@ -1,0 +1,1 @@
+<?php file_put_contents('./settings.json', file_get_contents('php://input')) or die("Can't write file"); ?>
