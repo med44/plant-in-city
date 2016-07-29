@@ -1,4 +1,5 @@
 // Needs to be uploaded to Yun via WiFi; Tool - Port - Network Ports - MyYun at 192.168...
+// v4 has an intermittent valve trigger to prevent water drops from sticking to the same hole
 
 //// UI/Web Server ////////////////////////
 #include <Bridge.h>
@@ -8,7 +9,7 @@
 #include <FileIO.h> // to work with files on the SD
 #include <Console.h>
 
-#define filePath "/mnt/sd/arduino/www/PIC_Yun11_newlogic/settings.json" //where to find the JSON settings file
+#define filePath "/mnt/sda1/arduino/www/PIC_Yun11_newlogic_v4/settings.json" //where to find the JSON settings file
 
 YunServer server;
 char json;
