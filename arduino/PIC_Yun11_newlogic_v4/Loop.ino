@@ -3,16 +3,19 @@ void loop() {
   /////////////////////////////////////////////////////////////////////////////
   
   // Settings update?
-  YunClient client = server.accept();    //puts the message comming from outside (server.accept) to var 'client'
+  BridgeClient client = server.accept();    //puts the message comming from outside (server.accept) to var 'client'
   if (client) {                          // if true - settings.json has been updated from the UI => read it and update variables
     Console.println(" new input coming!");
-    updateSet();                          //update the variables from the file
-     //printHtml();
     
       String command = client.readString();
       command.trim();        //kill whitespace
-      Serial.println(command);
-      
+      Console.println(command);
+
+      if (command == "updatedTimer"){
+      updateSet();                          //update the variables from the file
+       //printHtml();
+      }
+        
       // is "temperature" command?
       if (command == "currentTimers") {
   
@@ -47,7 +50,7 @@ void loop() {
 
   //Parse Linux timestamp and parse it to get our variables
   String timeString = result;
-//  Serial.print(timeString);
+//  Console.print(timeString);
   
   String dayNumber = timeString.substring(0,1);
   String time = timeString.substring(13, 21);
@@ -67,47 +70,47 @@ void loop() {
   //Run all the logic & debugging each second
   if (previousSecond != thisSecond){
  
-//  Serial.print("previousSecond: ");
-//  Serial.print(previousSecond);
-//  Serial.print(" thisSecond: ");
-//  Serial.print(thisSecond);
+//  Console.print("previousSecond: ");
+//  Console.print(previousSecond);
+//  Console.print(" thisSecond: ");
+//  Console.print(thisSecond);
     
     //Day of week values used on scheduler logic
-//  Serial.print(dayNumber); //this the raw String day of week number without int conversion
-//  Serial.print("\t");
-  Serial.print("thisDay: ");
-  Serial.print(thisDay);
-  Serial.print("\t"); 
-//  Serial.print("previousDay: "); //to compare last with last known day
-//  Serial.print(previousDay);
-//  Serial.print("\t");      
+//  Console.print(dayNumber); //this the raw String day of week number without int conversion
+//  Console.print("\t");
+  Console.print("thisDay: ");
+  Console.print(thisDay);
+  Console.print("\t"); 
+//  Console.print("previousDay: "); //to compare last with last known day
+//  Console.print(previousDay);
+//  Console.print("\t");      
   
   //Time & schedule values
-  Serial.print("time: ");
-  Serial.print("\t   "); 
-  Serial.print(time);
-  Serial.println(" -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -");
+  Console.print("time: ");
+  Console.print("\t   "); 
+  Console.print(time);
+  Console.println(" -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -");
     
   //Lighting scheduler values
-  Serial.print("counterLight: ");
-  Serial.print(counterLight);
-  Serial.print("\t");
-  Serial.print("lighTtime: ");
-  Serial.print(lightTime);
-  Serial.print("\t");
-  Serial.print("lightEnd: ");
-  Serial.print(lightEnd);
-  Serial.print("\t");
-  Serial.print("lightOn: ");
-  Serial.print(lightOn);
-  Serial.print("\t");
+  Console.print("counterLight: ");
+  Console.print(counterLight);
+  Console.print("\t");
+  Console.print("lighTtime: ");
+  Console.print(lightTime);
+  Console.print("\t");
+  Console.print("lightEnd: ");
+  Console.print(lightEnd);
+  Console.print("\t");
+  Console.print("lightOn: ");
+  Console.print(lightOn);
+  Console.print("\t");
 
   //Check if it's time to turn the lights ON  
   if (counterLight == 1){
-      Serial.print(" > Light day");
+      Console.print(" > Light day");
       if (time == lightTime) {
         //Trigger all events for lighting here
-        Serial.print(": alarm on");
+        Console.print(": alarm on");
         lightOn = 1; //Flags lights as being on
         redLights();
         blueLights();        
@@ -119,37 +122,37 @@ void loop() {
       if (lightOn == 1) {
         if (time == lightEnd) {
           //Trigger all events to shut off lighting here
-          Serial.print(": alarm off");
+          Console.print(": alarm off");
           lightOn = 0;
           lightsOff();
         }
      }
   
-  Serial.println("");
+  Console.println("");
   
   //IRRIGATION -------------------------------------
   
   //Irrigation scheduler values
-  Serial.print("counterWater: ");
-  Serial.print(counterWater);
-  Serial.print("\t");
-  Serial.print("watertime: ");
-  Serial.print(waterTime);
-  Serial.print("\t");
-  Serial.print("waterEnd: ");
-  Serial.print(waterEnd);
-  Serial.print("\t");
-  Serial.print("waterOn: ");
-  Serial.print(waterOn);
-  Serial.print("\t");
+  Console.print("counterWater: ");
+  Console.print(counterWater);
+  Console.print("\t");
+  Console.print("watertime: ");
+  Console.print(waterTime);
+  Console.print("\t");
+  Console.print("waterEnd: ");
+  Console.print(waterEnd);
+  Console.print("\t");
+  Console.print("waterOn: ");
+  Console.print(waterOn);
+  Console.print("\t");
   
      
   //Check if it's time to turn the water ON  
   if (counterWater == 1){
-      Serial.print(" > Water day");
+      Console.print(" > Water day");
       if (time == waterTime) {
         //Trigger all events for watering here
-        Serial.print(": water on");
+        Console.print(": water on");
         waterOn = 1; //Flags water as being on        
         //blueLights();
       }            
@@ -160,16 +163,11 @@ void loop() {
       if (waterOn == 1) {
         
        digitalWrite(8, HIGH); //turn water on
-       Serial.println("Water ON");   
-       delay (3000);
-       
-       digitalWrite(8, LOW);
-       Serial.println("Water OFF");   
-       delay (2000);
+       Console.println("Water ON");   
         
         if (time == waterEnd) {
           //Trigger all events to shut off watering here
-          Serial.print(": water off");
+          Console.print(": water off");
           waterOn = 0;          
           digitalWrite(8, LOW);
           //lightsOff();
@@ -186,19 +184,19 @@ void loop() {
     counterLight--;
     counterWater--;    
     
-    if (counterLight == 0){
+    if (counterLight <= 0){
       counterLight = lightDay;
       }    
   
-      if (counterWater == 0){
+      if (counterWater <= 0){
     counterWater = waterDay;
     }    
   }
   
   //  fastTime(); //use to debug, it makes a day pass faster
 
- Serial.println();
- Serial.println();
+ Console.println();
+ Console.println();
 
 
  }
@@ -231,18 +229,18 @@ void fastTime(){
        
   }
     
-  Serial.print("timer: ");
-  Serial.print(timer);
-  Serial.print("\t");
-  Serial.print("today: ");
-  Serial.print(today);
-  Serial.print("\t");
-  Serial.print("lastday: ");
-  Serial.print(lastday);
-  Serial.print("\t");
-  Serial.print("counterLight: ");
-  Serial.print(counterLight);
-  Serial.print("\t");
+  Console.print("timer: ");
+  Console.print(timer);
+  Console.print("\t");
+  Console.print("today: ");
+  Console.print(today);
+  Console.print("\t");
+  Console.print("lastday: ");
+  Console.print(lastday);
+  Console.print("\t");
+  Console.print("counterLight: ");
+  Console.print(counterLight);
+  Console.print("\t");
 
   //END debugging -----------------------------------------------------
 

@@ -9,7 +9,7 @@ void lightsOff() {
 
 void redLights() {
 
-  //Console.println("Red ");
+  Console.println("Red ");
 
   for (int i = 0; i < NUMPIXELS; i++) {
 
@@ -24,7 +24,7 @@ void redLights() {
 
 void blueLights() {
 
-  //Console.println("Blue ");
+  Console.println("Blue ");
 
   for (int i = 0; i < 6; i++) {
  //   Console.println(blueLEDs[i]);

@@ -8,8 +8,13 @@
 #include <ArduinoJson.h> // for JSON parsing
 #include <FileIO.h> // to work with files on the SD
 #include <Console.h>
+#include <Adafruit_NeoPixel.h>
+#include <avr/power.h>
+//#include <MemoryFree.h> //for debugging memory overload 
 
-#define filePath "/mnt/sda1/arduino/www/PIC_Yun11_newlogic_v4/settings.json" //where to find the JSON settings file
+
+#define jsonFilePath "/mnt/sda1/arduino/www/PIC_3D_Desk_Oct2016/settings.json" //where to find the JSON settings file
+#define logFilePath "/mnt/sda1/arduino/www/PIC_3D_Desk_Oct2016/datalog.txt" //where to find the log file 
 
 BridgeServer server;
 char json;
@@ -40,12 +45,10 @@ byte counterLight;                     // counts how many days left of frequency
 String waterTime = "17:58:40";      // SET BY USER -  what time does the irrigation start
 String waterDuration = "00:00:10";  // SET BY USER -  for how long is the water dripping
 String waterEnd;                    // COUNTED by the addTime function; waterTime + waterDuration
-boolean waterOn = 0;
+byte waterOn = 0;
 byte waterDay = 1;                  // SET BY USER - water every [waterDay] days
 byte sinceLastWaterDay = 0;         // counts days since last irrigation
 byte counterWater;                     // counts how many days left of frequency period
-
-
 
 
 //DEBUGGING
@@ -53,10 +56,22 @@ byte today = 1; //counts days of week 1-7
 byte lastday; //to comapre if days changed
 byte timer; //to pretend days pass quicker
 
-// Adafruit_NeoPixel shield ////////////////////////
-#include <Adafruit_NeoPixel.h>
-#include <avr/power.h>
+//// SOIL DATA ////////////////////////
+//Soil Moisture sensor parameters
+//Use DFRobotCapacitive Soil Moisture Sensor SEN0193
+int soilPin = 0; //connect blue cable to A0
+int soilPWR = 1; //power is A1
+int soilGND = 2; //ground is A2
+int soilVal =  0;
+int air = 518;
+int drySoil = 515;
+int wetSoil = 500;
+int soakedSoil = 450;
+int water = 285;
 
+int sampleTime = 1000;
+
+// Adafruit_NeoPixel shield ////////////////////////
 #define PIN            6            // Which pin on the Arduino is connected to the NeoPixels?
 #define NUMPIXELS      40           // How many NeoPixels are attached to the Arduino?
 
@@ -70,19 +85,18 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ80
 /////////////////////////////////////////////////////////////////////////////
 
 void setup() {
-  Serial.begin(115200);
-  server.listenOnLocalhost();
+  Serial.begin(9600);
+  Bridge.begin();           // initialize Bridge
+  server.listenOnLocalhost();  
   server.begin();
-  Bridge.begin();           // initialize Bridge   
   Console.begin();          // initialize Console, (instead of Serial). Serial monitor sometimes works, otherwise in Terminal use: ssh root@MyArdunoYunName.local 'telnet localhost 6571'
-  
+ 
   counterLight = lightDay; //make the counter be equal to the daily frequency 
   counterWater = waterDay;
 
-  
-
+  // UI / Web Server
   FileSystem.begin();
-  if(filePath){ updateSet(); } // update the settings IF there is a file, else they will stay default    
+  if(jsonFilePath){ updateSet(); } // update the settings IF there is a file, else they will stay default    
 
   // WATER / RELAY setup
   pinMode(8, OUTPUT); // relay operating 'driver'
@@ -93,22 +107,8 @@ void setup() {
   pixels.begin(); // This initializes the NeoPixel library.
   pixels.show(); // Initialize all pixels to 'off'
 
-  sayHi(); // indicates finish of the setup by blinking blue lights
+//  sayHi(); // indicates finish of the setup by blinking blue lights
   
-//  while (!Serial);              // wait for Serial Monitor to open
-//  Console.println("Time Check");  // Title of sketch 
-//  
-//    if (!date.running()) {
-//    date.begin("date");
-//    date.addParameter("+%u %d/%m/%Y %T");
-//    date.run();
-//  }
-//  
-//  Console.print("previousSecond: ");
-//  Console.print(previousSecond);
-//  Console.print(" thisSecond: ");
-//  Console.println(thisSecond);
-
 }
 
 

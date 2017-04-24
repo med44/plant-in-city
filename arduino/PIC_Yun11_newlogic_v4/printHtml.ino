@@ -1,4 +1,4 @@
 void printHtml(){
-   YunClient client = server.accept(); 
+   BridgeClient client = server.accept(); 
  
 }
